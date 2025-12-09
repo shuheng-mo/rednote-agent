@@ -1,6 +1,11 @@
-pandas==2.3.3
-numpy==2.3.5
-openai==2.9.0
-python-dotenv==1.2.1
-requests==2.31.0
-google-genai==0.6.5
+# Core data processing
+pandas>=2.0.0,<3.0.0
+numpy>=1.24.0,<2.0.0
+
+# API clients  
+openai>=1.0.0,<2.0.0
+google-genai>=1.0.0,<2.0.0
+requests>=2.31.0,<3.0.0
+
+# Configuration
+python-dotenv>=1.0.0,<2.0.0
