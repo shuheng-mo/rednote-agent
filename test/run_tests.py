@@ -43,12 +43,14 @@ def run_all_tests():
     if result.failures:
         print("\n 失败的测试:")
         for test, error in result.failures:
-            print(f"   - {test}: {error.split('AssertionError: ')[-1].split('\n')[0]}")
+            error_msg = error.split("AssertionError: ")[-1].split("\n")[0]
+            print(f"   - {test}: {error_msg}")
 
     if result.errors:
-        print("\n💥 错误的测试:")
+        print("\n 错误的测试:")
         for test, error in result.errors:
-            print(f"   - {test}: {error.split('\n')[-2]}")
+            error_msg = error.split("\n")[-2]
+            print(f"   - {test}: {error_msg}")
 
     if result.wasSuccessful():
         print("\n 所有测试通过！")
