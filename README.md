@@ -103,45 +103,45 @@ python test/run_tests.py
   - `FS_APP_SECRET`
   - `FS_APP_TOKEN`
   - `FS_TABLE_ID`
-- 创建 Workflow 文件： 在仓库根目录创建 `.github/workflows/run_agent.yml`：
+- 创建 Workflow 文件： 在仓库根目录创建 `.github/workflows/daily-analysis.yml`：
 
     ```yaml
     name: Daily RedNote Analysis
 
     on:
-    schedule:
+      schedule:
         # 每天早上9点运行 (UTC时间1点 = 北京时间9点)
         - cron: '0 1 * * *'
-    workflow_dispatch: # 允许手动触发
+      workflow_dispatch: # 允许手动触发
 
     jobs:
-    analyze-rednote:
+      analyze-rednote:
         runs-on: ubuntu-latest
         
         steps:
         - name: Checkout code
-        uses: actions/checkout@v4
+          uses: actions/checkout@v4
 
         - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
+          uses: actions/setup-python@v5
+          with:
             python-version: '3.11'
 
         - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
+          uses: actions/cache@v4
+          with:
             path: ~/.cache/pip
             key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
             restore-keys: |
-            ${{ runner.os }}-pip-
+              ${{ runner.os }}-pip-
 
         - name: Install dependencies
-        run: |
+          run: |
             python -m pip install --upgrade pip
             pip install -r requirements.txt
 
         - name: Run RedNote analysis
-        env:
+          env:
             # Gemini API配置
             GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
             
@@ -153,19 +153,19 @@ python test/run_tests.py
             
             # 可选：用户访问令牌
             FS_USER_ACCESS_TOKEN: ${{ secrets.FS_USER_ACCESS_TOKEN }}
-        run: |
+          run: |
             echo "开始运行小红书内容分析..."
             python cloud_agent_runner.py
             echo "分析完成!"
 
         - name: Upload logs
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
+          if: failure()
+          uses: actions/upload-artifact@v4
+          with:
             name: error-logs
             path: |
-            *.log
-            /tmp/*.log
+              *.log
+              /tmp/*.log
             retention-days: 7
     ```
 
